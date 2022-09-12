@@ -6,6 +6,7 @@ import com.lee.blog.dto.ArchiveDTO;
 import com.lee.blog.entity.Article;
 import com.lee.blog.dao.ArticleDao;
 import com.lee.blog.service.ArticleService;
+import com.lee.blog.util.BeanCopyUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,13 +38,15 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, Article> impleme
                 .orderByDesc(Article::getCreateTime));
 
         // 封装为DTO
-        ArrayList<ArchiveDTO> archiveDTOS = new ArrayList<>();
-        for (Article article : articles) {
-            ArchiveDTO archiveDTO = new ArchiveDTO();
-            BeanUtils.copyProperties(article,archiveDTO);
-            archiveDTOS.add(archiveDTO);
-        }
+        // ArrayList<ArchiveDTO> archiveDTOS = new ArrayList<>();
+        // for (Article article : articles) {
+        //     ArchiveDTO archiveDTO = new ArchiveDTO();
+        //     BeanUtils.copyProperties(article,archiveDTO);
+        //     archiveDTOS.add(archiveDTO);
+        // }
+        List<ArchiveDTO> archiveDTOS = BeanCopyUtils.copyList(articles, ArchiveDTO.class);
 
         return archiveDTOS;
     }
+
 }
