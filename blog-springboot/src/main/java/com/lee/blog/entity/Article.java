@@ -1,5 +1,6 @@
 package com.lee.blog.entity;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
@@ -78,13 +79,13 @@ public class Article {
      * 发表时间
      */
     @TableField(fill = FieldFill.INSERT)
-    private Date createTime;
+    private LocalDateTime createTime;
 
     /**
      * 更新时间
      */
     @TableField(fill = FieldFill.UPDATE)
-    private Date updateTime;
+    private LocalDateTime updateTime;
 
 }
 
