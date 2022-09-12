@@ -1,7 +1,9 @@
 package com.lee.blog.controller;
 
-import com.lee.blog.entity.Article;
+import com.lee.blog.dto.ArchiveDTO;
 import com.lee.blog.service.ArticleService;
+import com.lee.blog.vo.Result;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,9 +21,15 @@ public class ArticleController {
     @Autowired
     private ArticleService articleService;
 
-    @GetMapping("/articles")
-    public List<Article> ArticleList(){
-        return articleService.list();
+    /**
+     * 查看文章归档
+     *
+     * @return {@link Result<ArchiveDTO>} 文章归档列表
+     */
+    @ApiOperation(value = "查看文章归档")
+    @GetMapping("/articles/archives")
+    public Result<List<ArchiveDTO>> listArchives() {
+        return Result.ok(articleService.listArchives());
     }
 }
 
