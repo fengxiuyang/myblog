@@ -14,5 +14,5 @@ import java.util.List;
  */
 public interface ArticleService extends IService<Article> {
 
-    List<ArchiveDTO> listArchives();
+    List<ArchiveDTO> listArchives(Integer pageNum, Integer pageSize);
 }

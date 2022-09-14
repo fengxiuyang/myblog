@@ -17,6 +17,7 @@ import java.util.List;
  */
 
 @RestController
+@RequestMapping("/articles")
 public class ArticleController {
     @Autowired
     private ArticleService articleService;
@@ -27,9 +28,9 @@ public class ArticleController {
      * @return {@link Result<ArchiveDTO>} 文章归档列表
      */
     @ApiOperation(value = "查看文章归档")
-    @GetMapping("/articles/archives")
-    public Result<List<ArchiveDTO>> listArchives() {
-        return Result.ok(articleService.listArchives());
+    @GetMapping("archives")
+    public Result<List<ArchiveDTO>> listArchives(Integer pageNum, Integer pageSize) {
+        return Result.ok(articleService.listArchives(pageNum, pageSize));
     }
 }
 

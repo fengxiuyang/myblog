@@ -1,17 +1,16 @@
 package com.lee.blog.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.lee.blog.dao.ArticleDao;
 import com.lee.blog.dto.ArchiveDTO;
 import com.lee.blog.entity.Article;
-import com.lee.blog.dao.ArticleDao;
 import com.lee.blog.service.ArticleService;
 import com.lee.blog.util.BeanCopyUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.lee.blog.enums.ArticleStatusEnum.PUBLIC;
@@ -30,12 +29,23 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, Article> impleme
     private ArticleDao articleDao;
 
     @Override
-    public List<ArchiveDTO> listArchives() {
+    public List<ArchiveDTO> listArchives(Integer pageNum, Integer pageSize) {
         // 获取分页数据
-        List<Article> articles = articleDao.selectList(new LambdaQueryWrapper<Article>().
+        // List<Article> articles = articleDao.selectList(new LambdaQueryWrapper<Article>().
+        //         select(Article::getId, Article::getArticleTitle, Article::getCreateTime)
+        //         .eq(Article::getStatus, PUBLIC.getStatus())
+        //         .orderByDesc(Article::getCreateTime));
+
+        // 查询条件
+        LambdaQueryWrapper<Article> lambdaQueryWrapper = new LambdaQueryWrapper<Article>().
                 select(Article::getId, Article::getArticleTitle, Article::getCreateTime)
                 .eq(Article::getStatus, PUBLIC.getStatus())
-                .orderByDesc(Article::getCreateTime));
+                .orderByDesc(Article::getCreateTime);
+
+        // 分页查询
+        Page<Article> page = new Page<>(pageNum, pageSize);
+        page(page, lambdaQueryWrapper);
+        List<Article> articles = page.getRecords();
 
         // 封装为DTO
         // ArrayList<ArchiveDTO> archiveDTOS = new ArrayList<>();
