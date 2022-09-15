@@ -3,8 +3,7 @@ package com.lee.blog.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lee.blog.dto.ArchiveDTO;
 import com.lee.blog.entity.Article;
-
-import java.util.List;
+import com.lee.blog.vo.PageResult;
 
 /**
  * 文章
@@ -14,5 +13,5 @@ import java.util.List;
  */
 public interface ArticleService extends IService<Article> {
 
-    List<ArchiveDTO> listArchives(Integer pageNum, Integer pageSize);
+    PageResult<ArchiveDTO> listArchives(Integer pageNum, Integer pageSize);
 }

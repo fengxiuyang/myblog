@@ -8,6 +8,7 @@ import com.lee.blog.dto.ArchiveDTO;
 import com.lee.blog.entity.Article;
 import com.lee.blog.service.ArticleService;
 import com.lee.blog.util.BeanCopyUtils;
+import com.lee.blog.vo.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,13 +30,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, Article> impleme
     private ArticleDao articleDao;
 
     @Override
-    public List<ArchiveDTO> listArchives(Integer pageNum, Integer pageSize) {
-        // 获取分页数据
-        // List<Article> articles = articleDao.selectList(new LambdaQueryWrapper<Article>().
-        //         select(Article::getId, Article::getArticleTitle, Article::getCreateTime)
-        //         .eq(Article::getStatus, PUBLIC.getStatus())
-        //         .orderByDesc(Article::getCreateTime));
-
+    public PageResult<ArchiveDTO> listArchives(Integer pageNum, Integer pageSize) {
         // 查询条件
         LambdaQueryWrapper<Article> lambdaQueryWrapper = new LambdaQueryWrapper<Article>().
                 select(Article::getId, Article::getArticleTitle, Article::getCreateTime)
@@ -48,15 +43,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, Article> impleme
         List<Article> articles = page.getRecords();
 
         // 封装为DTO
-        // ArrayList<ArchiveDTO> archiveDTOS = new ArrayList<>();
-        // for (Article article : articles) {
-        //     ArchiveDTO archiveDTO = new ArchiveDTO();
-        //     BeanUtils.copyProperties(article,archiveDTO);
-        //     archiveDTOS.add(archiveDTO);
-        // }
-        List<ArchiveDTO> archiveDTOS = BeanCopyUtils.copyList(articles, ArchiveDTO.class);
+        List<ArchiveDTO> archiveDTOList = BeanCopyUtils.copyList(articles, ArchiveDTO.class);
 
-        return archiveDTOS;
+        return new PageResult<>(archiveDTOList, (int)page.getTotal());
     }
 
 }
