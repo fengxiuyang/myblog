@@ -23,11 +23,17 @@ import java.util.Objects;
  */
 
 @Service
-public class UserDetailServiceImpl implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     UserAuthDao userAuthDao;
     @Resource
     private HttpServletRequest request;
+
+    private static final int a=1;
+
+    public static void aaa(){
+        int b=5;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

@@ -35,7 +35,7 @@ public class UserAuthServiceImpl extends ServiceImpl<UserAuthDao, UserAuth> impl
 
     @Override
     public LoginVO login(UserAuth userAuth) {
-        //
+        // 封装authenticationToken，通过authenticationManager验证后，获取authentication对象
         UsernamePasswordAuthenticationToken authenticationToken = new
                 UsernamePasswordAuthenticationToken(userAuth.getUsername(), userAuth.getPassword());
         Authentication authentication = authenticationManager.authenticate(authenticationToken);

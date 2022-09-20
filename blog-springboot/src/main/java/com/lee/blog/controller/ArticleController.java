@@ -29,7 +29,7 @@ public class ArticleController {
      * @return {@link Result<ArchiveDTO>} 文章归档列表
      */
     @ApiOperation(value = "查看文章归档")
-    @GetMapping("archives")
+    @GetMapping("/archives")
     public Result<PageResult<ArchiveDTO>> listArchives(Integer pageNum, Integer pageSize) {
         return Result.ok(articleService.listArchives(pageNum, pageSize));
     }
