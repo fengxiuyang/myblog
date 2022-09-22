@@ -24,6 +24,8 @@ import java.util.Objects;
 import static com.lee.blog.constant.CommonConst.APPLICATION_JSON;
 
 /**
+ * 登陆校验过滤器
+ *
  * @author: zhicheng lee
  * @date: 2022/9/20 21:33
  */
