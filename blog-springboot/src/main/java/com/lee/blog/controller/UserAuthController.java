@@ -26,4 +26,9 @@ public class UserAuthController {
         return  Result.ok(userAuthService.login(userAuth));
     }
 
+    @PostMapping("/logout")
+    public Result<?> logout(){
+        return Result.ok(userAuthService.logout());
+    }
+
 }

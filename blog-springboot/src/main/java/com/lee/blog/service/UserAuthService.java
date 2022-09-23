@@ -13,4 +13,6 @@ import com.lee.blog.vo.LoginVO;
 
 public interface UserAuthService extends IService<UserAuth> {
     public LoginVO login(UserAuth userAuth);
+
+    public Object logout();
 }

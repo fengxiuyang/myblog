@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -55,7 +56,19 @@ public class UserAuthServiceImpl extends ServiceImpl<UserAuthDao, UserAuth> impl
 
         // 封装 jwt 和 userDetailDTO
         UserInfoVO userInfoVO = BeanCopyUtils.copyObject(userDetailDTO, UserInfoVO.class);
-        LoginVO loginVO=new LoginVO(jwt,userInfoVO);
+        LoginVO loginVO = new LoginVO(jwt, userInfoVO);
         return loginVO;
+    }
+
+    @Override
+    public Object logout() {
+        // 获取token，解析得到userId
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailDTO userDetailDTO = (UserDetailDTO) authentication.getPrincipal();
+        int userId = userDetailDTO.getId();
+
+        // 删除redis中的用户信息
+        redisService.del("bloglogin:" + userId);
+        return null;
     }
 }
