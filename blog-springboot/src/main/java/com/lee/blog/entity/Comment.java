@@ -11,32 +11,38 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 /**
- * 分类
+ * 评论
  *
  * @author: zhicheng lee
- * @date: 2022/9/17 9:24
+ * @date: 2022/9/24 16:42
  */
 
 @SuppressWarnings("serial")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("sg_category")
-public class Category {
+@TableName("sg_comment")
+public class Comment  {
     @TableId
     private Long id;
 
-    //分类名
-    private String name;
+    //评论类型（0代表文章评论，1代表友链评论）
+    private String type;
 
-    //父分类id，如果没有父分类为-1
-    private Long pid;
+    //文章id
+    private Long articleId;
 
-    //描述
-    private String description;
+    //根评论id
+    private Long rootId;
 
-    //状态0:正常,1禁用
-    private String status;
+    //评论内容
+    private String content;
+
+    //所回复的目标评论的userid，若为-1，代表为根评论
+    private Long toCommentUserId;
+
+    //回复目标评论id
+    private Long toCommentId;
 
     @TableField(fill = FieldFill.INSERT)
     private Long createBy;
