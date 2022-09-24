@@ -12,7 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 
 @SpringBootApplication
-@MapperScan("com.lee.blog.dao")
+@MapperScan("com.lee.blog.mapper")
 public class BlogApplication {
     public static void main(String[] args) {
         SpringApplication.run(BlogApplication.class,args);

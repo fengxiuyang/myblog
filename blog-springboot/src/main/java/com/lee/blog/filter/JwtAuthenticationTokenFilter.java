@@ -1,11 +1,12 @@
 package com.lee.blog.filter;
 
 import com.alibaba.fastjson.JSON;
-import com.lee.blog.dto.UserDetailDTO;
-import com.lee.blog.enums.StatusCodeEnum;
-import com.lee.blog.service.RedisService;
-import com.lee.blog.util.JwtUtils;
-import com.lee.blog.vo.Result;
+import com.lee.blog.entity.LoginUser;
+import com.lee.blog.enums.AppHttpCodeEnum;
+import com.lee.blog.util.JwtUtil;
+import com.lee.blog.util.RedisCache;
+import com.lee.blog.util.WebUtils;
+import com.lee.blog.vo.ResponseResult;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,61 +22,56 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Objects;
 
-import static com.lee.blog.constant.CommonConst.APPLICATION_JSON;
-
 /**
- * 登陆校验过滤器
+ * jwt工具类
  *
  * @author: zhicheng lee
- * @date: 2022/9/20 21:33
+ * @date: 2022/9/17 9:24
  */
 
 @Component
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
     @Autowired
-    RedisService redisService;
+    private RedisCache redisCache;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        // 获取请求头中的token
+        //获取请求头中的token
         String token = request.getHeader("token");
-
-        // 若没有token，则放行，交给security后边的filter处理
-        if(!StringUtils.hasText(token)){
-            filterChain.doFilter(request,response);
-            return ;
+        if (!StringUtils.hasText(token)) {
+            //说明该接口不需要登录  直接放行
+            filterChain.doFilter(request, response);
+            return;
         }
-        
-        // 解析并获取userid
-        Claims claims=null;
-
-        try{
-            claims= JwtUtils.parseJWT(token);
-        }catch (Exception e){
-            // token超时、非法等
-            // 前端需要重新登陆
-            response.setContentType(APPLICATION_JSON);
-            response.getWriter().write(JSON.toJSONString(Result.fail(StatusCodeEnum.NO_LOGIN)));
-            return ;
+        //解析获取userid
+        Claims claims = null;
+        try {
+            claims = JwtUtil.parseJWT(token);
+        } catch (Exception e) {
+            e.printStackTrace();
+            //token超时  token非法
+            //响应告诉前端需要重新登录
+            ResponseResult result = ResponseResult.errorResult(AppHttpCodeEnum.NEED_LOGIN);
+            WebUtils.renderString(response, JSON.toJSONString(result));
+            return;
         }
-
-        // 根据userid，从redis中获取用户信息
-        String userId=claims.getSubject();
-        UserDetailDTO userDetailDTO= (UserDetailDTO) redisService.get("bloglogin:"+userId);
-        
-        // 如果获取不到，说明登陆过期
-        if(Objects.isNull(userDetailDTO)){
-            response.setContentType(APPLICATION_JSON);
-            response.getWriter().write(JSON.toJSONString(Result.fail(StatusCodeEnum.NO_LOGIN)));
-            return ;
+        String userId = claims.getSubject();
+        //从redis中获取用户信息
+        LoginUser loginUser = redisCache.getCacheObject("bloglogin:" + userId);
+        //如果获取不到
+        if (Objects.isNull(loginUser)) {
+            //说明登录过期  提示重新登录
+            ResponseResult result = ResponseResult.errorResult(AppHttpCodeEnum.NEED_LOGIN);
+            WebUtils.renderString(response, JSON.toJSONString(result));
+            return;
         }
-
-        // 如果可以获取，则存入SecurityContextHolder
-        UsernamePasswordAuthenticationToken authenticationToken=new UsernamePasswordAuthenticationToken(userDetailDTO,null,null);
+        //存入SecurityContextHolder
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUser, null, null);
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
-        // 放行
-        filterChain.doFilter(request,response);
+        filterChain.doFilter(request, response);
     }
+
+
 }

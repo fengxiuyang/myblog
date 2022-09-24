@@ -1,14 +1,10 @@
 package com.lee.blog.controller;
 
-import com.lee.blog.dto.ArchiveDTO;
+
 import com.lee.blog.service.ArticleService;
-import com.lee.blog.vo.PageResult;
-import com.lee.blog.vo.Result;
-import io.swagger.annotations.ApiOperation;
+import com.lee.blog.vo.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 文章
@@ -18,20 +14,43 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 @RestController
-@RequestMapping("/articles")
+@RequestMapping("/article")
 public class ArticleController {
+
     @Autowired
     private ArticleService articleService;
 
     /**
-     * 查看文章归档
-     *
-     * @return {@link Result<ArchiveDTO>} 文章归档列表
+     * 热门文章列表
      */
-    @ApiOperation(value = "查看文章归档")
-    @GetMapping("/archives")
-    public Result<PageResult<ArchiveDTO>> listArchives(Integer pageNum, Integer pageSize) {
-        return Result.ok(articleService.listArchives(pageNum, pageSize));
+    @GetMapping("/hotArticleList")
+    public ResponseResult hotArticleList() {
+
+        ResponseResult result = articleService.hotArticleList();
+        return result;
+    }
+
+    /**
+     * 文章列表
+     */
+    @GetMapping("/articleList")
+    public ResponseResult articleList(Integer pageNum, Integer pageSize, Long categoryId) {
+        return articleService.articleList(pageNum, pageSize, categoryId);
+    }
+
+    /**
+     * 更新浏览数
+     */
+    @PutMapping("/updateViewCount/{id}")
+    public ResponseResult updateViewCount(@PathVariable("id") Long id) {
+        return articleService.updateViewCount(id);
+    }
+
+    /**
+     * 获取文章详细信息
+     */
+    @GetMapping("/{id}")
+    public ResponseResult getArticleDetail(@PathVariable("id") Long id) {
+        return articleService.getArticleDetail(id);
     }
 }
-

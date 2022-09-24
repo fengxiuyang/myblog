@@ -6,38 +6,34 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
+ * 复制工具类
+ *
  * @author: zhicheng lee
- * @date: 2022/9/12 15:55
+ * @date: 2022/9/17 9:24
  */
 
 public class BeanCopyUtils {
+
     private BeanCopyUtils() {
     }
 
-    /**
-     * 复制对象
-     */
-    public static <V> V copyObject(Object source, Class<V> clazz) {
-        V tmp = null;
-
+    public static <V> V copyBean(Object source, Class<V> clazz) {
+        //创建目标对象
+        V result = null;
         try {
-            tmp = clazz.newInstance();
-            if (null != source) {
-                BeanUtils.copyProperties(source, tmp);
-            }
+            result = clazz.newInstance();
+            //实现属性copy
+            BeanUtils.copyProperties(source, result);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        return tmp;
+        //返回结果
+        return result;
     }
 
-    /**
-     * 拷贝集合
-     */
-    public static <O,V> List<V> copyList(List<O> source,Class<V> clazz){
-        return source.stream()
-                .map(s->copyObject(s,clazz))
+    public static <O, V> List<V> copyBeanList(List<O> list, Class<V> clazz) {
+        return list.stream()
+                .map(o -> copyBean(o, clazz))
                 .collect(Collectors.toList());
     }
 }

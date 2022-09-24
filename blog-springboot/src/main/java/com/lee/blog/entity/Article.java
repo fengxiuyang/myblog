@@ -1,14 +1,15 @@
 package com.lee.blog.entity;
 
-import java.time.LocalDateTime;
-import java.util.Date;
-
-import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
+
+import java.util.Date;
 
 /**
  * 文章
@@ -21,71 +22,47 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@TableName("sg_article")
+@Accessors(chain = true)
 public class Article {
+    @TableId
+    private Long id;
+    //标题
+    private String title;
+    //文章内容
+    private String content;
+    //文章摘要
+    private String summary;
+    //所属分类id
+    private Long categoryId;
 
-    private Integer id;
+    @TableField(exist = false)
+    private String categoryName;
+    //缩略图
+    private String thumbnail;
+    //是否置顶（0否，1是）
+    private String isTop;
+    //状态（0已发布，1草稿）
+    private String status;
+    //访问量
+    private Long viewCount;
+    //是否允许评论 1是，0否
+    private String isComment;
 
-    /**
-     * 作者
-     */
-    private Integer userId;
+    private Long createBy;
 
-    /**
-     * 文章分类
-     */
-    private Integer categoryId;
+    private Date createTime;
 
-    /**
-     * 文章缩略图
-     */
-    private String articleCover;
+    private Long updateBy;
 
-    /**
-     * 标题
-     */
-    private String articleTitle;
+    private Date updateTime;
+    //删除标志（0代表未删除，1代表已删除）
+    private Integer delFlag;
 
-    /**
-     * 内容
-     */
-    private String articleContent;
-
-    /**
-     * 文章类型 1原创 2转载 3翻译
-     */
-    private Integer type;
-
-    /**
-     * 原文链接
-     */
-    private String originalUrl;
-
-    /**
-     * 是否置顶 0否 1是
-     */
-    private Integer isTop;
-
-    /**
-     * 是否删除  0否 1是
-     */
-    private Integer isDelete;
-
-    /**
-     * 状态值 1公开 2私密 3评论可见
-     */
-    private Integer status;
-
-    /**
-     * 发表时间
-     */
-    @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime createTime;
-
-    /**
-     * 更新时间
-     */
-    @TableField(fill = FieldFill.UPDATE)
-    private LocalDateTime updateTime;
+    public Article(Long id, long viewCount) {
+        this.id = id;
+        this.viewCount = viewCount;
+    }
 
 }
 
