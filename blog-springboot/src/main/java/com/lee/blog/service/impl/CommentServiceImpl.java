@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lee.blog.entity.Comment;
+import com.lee.blog.enums.AppHttpCodeEnum;
+import com.lee.blog.exception.SystemException;
 import com.lee.blog.mapper.CommentMapper;
 import com.lee.blog.service.CommentService;
 import com.lee.blog.service.UserService;
@@ -13,6 +15,7 @@ import com.lee.blog.vo.PageVo;
 import com.lee.blog.vo.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -50,6 +53,16 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 
         // 封装为VO并返回
         return ResponseResult.okResult(new PageVo(commentVoList, page.getTotal()));
+    }
+
+    @Override
+    public ResponseResult addComment(Comment comment) {
+        //评论内容不能为空
+        if(!StringUtils.hasText(comment.getContent())){
+            throw new SystemException(AppHttpCodeEnum.CONTENT_NOT_NULL);
+        }
+        save(comment);
+        return ResponseResult.okResult();
     }
 
     /**
