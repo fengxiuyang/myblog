@@ -14,9 +14,5 @@ import com.lee.blog.vo.ResponseResult;
 public interface UserService extends IService<User> {
 
     ResponseResult userInfo();
-
-    ResponseResult updateUserInfo(User user);
-
-    ResponseResult register(User user);
 }
 
