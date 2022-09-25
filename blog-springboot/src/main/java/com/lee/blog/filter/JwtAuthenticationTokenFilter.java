@@ -1,7 +1,7 @@
 package com.lee.blog.filter;
 
 import com.alibaba.fastjson.JSON;
-import com.lee.blog.entity.LoginUser;
+import com.lee.blog.dto.UserDetailsDto;
 import com.lee.blog.enums.AppHttpCodeEnum;
 import com.lee.blog.util.JwtUtil;
 import com.lee.blog.util.RedisCache;
@@ -58,16 +58,16 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         }
         String userId = claims.getSubject();
         //从redis中获取用户信息
-        LoginUser loginUser = redisCache.getCacheObject("bloglogin:" + userId);
+        UserDetailsDto userDetailsDto = redisCache.getCacheObject("bloglogin:" + userId);
         //如果获取不到
-        if (Objects.isNull(loginUser)) {
+        if (Objects.isNull(userDetailsDto)) {
             //说明登录过期  提示重新登录
             ResponseResult result = ResponseResult.errorResult(AppHttpCodeEnum.NEED_LOGIN);
             WebUtils.renderString(response, JSON.toJSONString(result));
             return;
         }
         //存入SecurityContextHolder
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUser, null, null);
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetailsDto, null, null);
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
         filterChain.doFilter(request, response);

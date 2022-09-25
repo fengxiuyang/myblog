@@ -1,6 +1,6 @@
 package com.lee.blog.util;
 
-import com.lee.blog.entity.LoginUser;
+import com.lee.blog.dto.UserDetailsDto;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -16,8 +16,8 @@ public class SecurityUtils {
     /**
      * 获取用户
      **/
-    public static LoginUser getLoginUser() {
-        return (LoginUser) getAuthentication().getPrincipal();
+    public static UserDetailsDto getLoginUser() {
+        return (UserDetailsDto) getAuthentication().getPrincipal();
     }
 
     /**

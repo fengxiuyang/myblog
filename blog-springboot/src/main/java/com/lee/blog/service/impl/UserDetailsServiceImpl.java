@@ -1,7 +1,7 @@
 package com.lee.blog.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.lee.blog.entity.LoginUser;
+import com.lee.blog.dto.UserDetailsDto;
 import com.lee.blog.entity.User;
 import com.lee.blog.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +37,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
         //返回用户信息
         // TODO 查询权限信息封装
-        return new LoginUser(user);
+        return new UserDetailsDto(user);
     }
 }

@@ -1,5 +1,6 @@
-package com.lee.blog.entity;
+package com.lee.blog.dto;
 
+import com.lee.blog.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,7 +19,7 @@ import java.util.Collection;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginUser implements UserDetails {
+public class UserDetailsDto implements UserDetails {
 
     private User user;
 

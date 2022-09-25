@@ -1,6 +1,6 @@
 package com.lee.blog.service.impl;
 
-import com.lee.blog.entity.LoginUser;
+import com.lee.blog.dto.UserDetailsDto;
 import com.lee.blog.entity.User;
 import com.lee.blog.service.BlogLoginService;
 import com.lee.blog.util.BeanCopyUtils;
@@ -43,15 +43,15 @@ public class BlogLoginServiceImpl implements BlogLoginService {
             throw new RuntimeException("用户名或密码错误");
         }
         //获取userid 生成token
-        LoginUser loginUser = (LoginUser) authenticate.getPrincipal();
-        String userId = loginUser.getUser().getId().toString();
+        UserDetailsDto userDetailsDto = (UserDetailsDto) authenticate.getPrincipal();
+        String userId = userDetailsDto.getUser().getId().toString();
         String jwt = JwtUtil.createJWT(userId);
         //把用户信息存入redis
-        redisCache.setCacheObject("bloglogin:" + userId, loginUser);
+        redisCache.setCacheObject("bloglogin:" + userId, userDetailsDto);
 
         //把token和userinfo封装 返回
         //把User转换成UserInfoVo
-        UserInfoVo userInfoVo = BeanCopyUtils.copyBean(loginUser.getUser(), UserInfoVo.class);
+        UserInfoVo userInfoVo = BeanCopyUtils.copyBean(userDetailsDto.getUser(), UserInfoVo.class);
         BlogUserLoginVo vo = new BlogUserLoginVo(jwt, userInfoVo);
         return ResponseResult.okResult(vo);
     }
@@ -60,9 +60,9 @@ public class BlogLoginServiceImpl implements BlogLoginService {
     public ResponseResult logout() {
         //获取token 解析获取userid
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        LoginUser loginUser = (LoginUser) authentication.getPrincipal();
+        UserDetailsDto userDetailsDto = (UserDetailsDto) authentication.getPrincipal();
         //获取userid
-        Long userId = loginUser.getUser().getId();
+        Long userId = userDetailsDto.getUser().getId();
         //删除redis中的用户信息
         redisCache.deleteObject("bloglogin:" + userId);
         return ResponseResult.okResult();
