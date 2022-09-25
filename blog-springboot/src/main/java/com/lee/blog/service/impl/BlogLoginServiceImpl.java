@@ -4,7 +4,7 @@ import com.lee.blog.dto.UserDetailsDto;
 import com.lee.blog.entity.User;
 import com.lee.blog.service.BlogLoginService;
 import com.lee.blog.util.BeanCopyUtils;
-import com.lee.blog.util.JwtUtil;
+import com.lee.blog.util.JwtUtils;
 import com.lee.blog.util.RedisCache;
 import com.lee.blog.vo.BlogUserLoginVo;
 import com.lee.blog.vo.ResponseResult;
@@ -45,7 +45,7 @@ public class BlogLoginServiceImpl implements BlogLoginService {
         //获取userid 生成token
         UserDetailsDto userDetailsDto = (UserDetailsDto) authenticate.getPrincipal();
         String userId = userDetailsDto.getUser().getId().toString();
-        String jwt = JwtUtil.createJWT(userId);
+        String jwt = JwtUtils.createJWT(userId);
         //把用户信息存入redis
         redisCache.setCacheObject("bloglogin:" + userId, userDetailsDto);
 

@@ -3,7 +3,7 @@ package com.lee.blog.filter;
 import com.alibaba.fastjson.JSON;
 import com.lee.blog.dto.UserDetailsDto;
 import com.lee.blog.enums.AppHttpCodeEnum;
-import com.lee.blog.util.JwtUtil;
+import com.lee.blog.util.JwtUtils;
 import com.lee.blog.util.RedisCache;
 import com.lee.blog.util.WebUtils;
 import com.lee.blog.vo.ResponseResult;
@@ -47,7 +47,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         //解析获取userid
         Claims claims = null;
         try {
-            claims = JwtUtil.parseJWT(token);
+            claims = JwtUtils.parseJWT(token);
         } catch (Exception e) {
             e.printStackTrace();
             //token超时  token非法

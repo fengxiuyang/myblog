@@ -58,6 +58,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login").anonymous()
                 // 退出接口需要有认证才可以访问
                 .antMatchers("/logout").authenticated()
+                .antMatchers("/user/userInfo").authenticated()
+                .antMatchers("/upload").authenticated()
                 // 其它全部请求，不需要认证即可访问
                 .anyRequest().permitAll();
 
