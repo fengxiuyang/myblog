@@ -40,4 +40,12 @@ public class CommentController {
         return commentService.addComment(comment);
     }
 
+    /**
+     * 查询友链评论
+     */
+    @GetMapping("/linkCommentList")
+    public ResponseResult linkCommentList(Integer pageNum,Integer pageSize){
+        return commentService.commentList(SystemConstants.LINK_COMMENT,null,pageNum,pageSize);
+    }
+
 }

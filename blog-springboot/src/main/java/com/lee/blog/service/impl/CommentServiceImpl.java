@@ -3,6 +3,7 @@ package com.lee.blog.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.lee.blog.constants.SystemConstants;
 import com.lee.blog.entity.Comment;
 import com.lee.blog.enums.AppHttpCodeEnum;
 import com.lee.blog.exception.SystemException;
@@ -37,7 +38,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         // 查询条件
         LambdaQueryWrapper<Comment> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Comment::getRootId, -1)
-                .eq(Comment::getArticleId, articleId)
+                .eq(SystemConstants.ARTICLE_COMMENT.equals(commentType),Comment::getArticleId,articleId)
                 .eq(Comment::getType, commentType);
 
         // 分页查询
