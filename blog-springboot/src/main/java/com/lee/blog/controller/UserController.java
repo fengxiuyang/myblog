@@ -1,5 +1,6 @@
 package com.lee.blog.controller;
 
+import com.lee.blog.annotation.SystemLog;
 import com.lee.blog.entity.User;
 import com.lee.blog.service.UserService;
 import com.lee.blog.vo.ResponseResult;
@@ -24,7 +25,7 @@ public class UserController {
      * 查询用户信息
      */
     @GetMapping("/userInfo")
-    public ResponseResult userInfo(){
+    public ResponseResult userInfo() {
         return userService.userInfo();
     }
 
@@ -32,7 +33,8 @@ public class UserController {
      * 更新用户信息
      */
     @PutMapping("/userInfo")
-    public ResponseResult updateUserInfo(@RequestBody User user){
+    @SystemLog(businessName = "更新用户信息")
+    public ResponseResult updateUserInfo(@RequestBody User user) {
         return userService.updateUserInfo(user);
     }
 
@@ -40,7 +42,7 @@ public class UserController {
      * 注册用户信息
      */
     @PostMapping("/register")
-    public ResponseResult register(@RequestBody User user){
+    public ResponseResult register(@RequestBody User user) {
         return userService.register(user);
     }
 
