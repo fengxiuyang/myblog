@@ -35,6 +35,8 @@ public class UploadServiceImpl implements UploadService {
     private String accessKey;
     private String secretKey;
     private String bucket;
+    private String domain;
+    private String failedDomain;
 
     @Override
     public ResponseResult uploadImage(MultipartFile img) {
@@ -73,7 +75,7 @@ public class UploadServiceImpl implements UploadService {
                 DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
                 System.out.println(putRet.key);
                 System.out.println(putRet.hash);
-                return "http://rirmohhkr.hb-bkt.clouddn.com/" + key;
+                return domain + key;
             } catch (QiniuException ex) {
                 Response r = ex.response;
                 System.err.println(r.toString());
@@ -86,6 +88,6 @@ public class UploadServiceImpl implements UploadService {
         } catch (Exception ex) {
             //ignore
         }
-        return "www";
+        return failedDomain;
     }
 }

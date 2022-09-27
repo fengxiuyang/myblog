@@ -41,5 +41,7 @@ oss:
   accessKey: Qj1LEeESxcMN4VKPa_kc1Mg76em5KB91-86oj6TO
   secretKey: l8WXGKVJAGKqvHd7ulFn560fB5Fd9lC7fl0REZt2
   bucket: fengxiuyang
+  domain: "http://rirmohhkr.hb-bkt.clouddn.com/"
+  failedDomain: "www"
 
 

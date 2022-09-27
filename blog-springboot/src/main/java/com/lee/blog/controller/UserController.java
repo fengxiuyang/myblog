@@ -1,11 +1,10 @@
 package com.lee.blog.controller;
 
+import com.lee.blog.entity.User;
 import com.lee.blog.service.UserService;
 import com.lee.blog.vo.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 用户
@@ -27,5 +26,13 @@ public class UserController {
     @GetMapping("/userInfo")
     public ResponseResult userInfo(){
         return userService.userInfo();
+    }
+
+    /**
+     * 更新用户信息
+     */
+    @PutMapping("/userInfo")
+    public ResponseResult updateUserInfo(@RequestBody User user){
+        return userService.updateUserInfo(user);
     }
 }
