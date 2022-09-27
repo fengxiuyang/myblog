@@ -107,4 +107,11 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         //封装响应返回
         return ResponseResult.okResult(articleDetailVo);
     }
+
+    @Override
+    public ResponseResult updateViewCount(Long id) {
+        // 更新redis中对应 id的浏览量
+        redisCache.incrementCacheMapValue("article:viewCount",id.toString(),1);
+        return ResponseResult.okResult();
+    }
 }
