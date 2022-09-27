@@ -39,14 +39,6 @@ public class ArticleController {
     }
 
     /**
-     * 更新浏览数
-     */
-    @PutMapping("/updateViewCount/{id}")
-    public ResponseResult updateViewCount(@PathVariable("id") Long id) {
-        return articleService.updateViewCount(id);
-    }
-
-    /**
      * 获取文章详细信息
      */
     @GetMapping("/{id}")
