@@ -1,16 +1,16 @@
 package com.lee.blog.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.lee.blog.entity.Link;
+import com.lee.blog.entity.Tag;
 import org.springframework.stereotype.Repository;
 
 /**
- * 友链
+ * 标签
  *
  * @author: zhicheng lee
- * @date: 2022/9/25 14:52
+ * @date: 2022/9/28 21:10
  */
 
 @Repository
-public interface LinkMapper extends BaseMapper<Link> {
+public interface TagMapper extends BaseMapper<Tag> {
 }

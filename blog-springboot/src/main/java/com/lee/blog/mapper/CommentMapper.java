@@ -5,6 +5,8 @@ import com.lee.blog.entity.Comment;
 import org.springframework.stereotype.Repository;
 
 /**
+ * 评论
+ *
  * @author: zhicheng lee
  * @date: 2022/9/24 16:51
  */
