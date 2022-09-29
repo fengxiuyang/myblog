@@ -38,4 +38,12 @@ public class TagController {
         return tagService.add(tagDto);
     }
 
+    /**
+     * 删除标签
+     */
+    @DeleteMapping("/{id}")
+    public ResponseResult delete(@PathVariable Long id){
+        return tagService.delete(id);
+    }
+
 }
