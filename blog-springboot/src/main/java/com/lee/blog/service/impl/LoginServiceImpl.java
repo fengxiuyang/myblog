@@ -1,6 +1,7 @@
 package com.lee.blog.service.impl;
 
 import com.lee.blog.dto.UserDetailsDto;
+import com.lee.blog.entity.Menu;
 import com.lee.blog.entity.User;
 import com.lee.blog.service.LoginService;
 import com.lee.blog.service.MenuService;
@@ -9,10 +10,7 @@ import com.lee.blog.util.BeanCopyUtils;
 import com.lee.blog.util.JwtUtils;
 import com.lee.blog.util.RedisCache;
 import com.lee.blog.util.SecurityUtils;
-import com.lee.blog.vo.AdminUserInfoVo;
-import com.lee.blog.vo.BlogUserLoginVo;
-import com.lee.blog.vo.ResponseResult;
-import com.lee.blog.vo.UserInfoVo;
+import com.lee.blog.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -84,5 +82,14 @@ public class LoginServiceImpl implements LoginService {
         // 封装数据返回
         AdminUserInfoVo adminUserInfoVo = new AdminUserInfoVo(perms,roleKeyList,userInfoVo);
         return ResponseResult.okResult(adminUserInfoVo);
+    }
+
+    @Override
+    public ResponseResult<RoutersVo> getRouters() {
+        Long userId = SecurityUtils.getUserId();
+        //查询menu 结果是tree的形式
+        List<Menu> menus = menuService.selectRouterMenuTreeByUserId(userId);
+        //封装数据返回
+        return ResponseResult.okResult(new RoutersVo(menus));
     }
 }

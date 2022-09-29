@@ -38,4 +38,44 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         // 否则返回所具有的权限
         return getBaseMapper().selectPermsByUserId(id);
     }
+
+    @Override
+    public List<Menu> selectRouterMenuTreeByUserId(Long userId) {
+        MenuMapper menuMapper = getBaseMapper();
+        List<Menu> menus = null;
+
+        // 判断是否是管理员
+        if(SecurityUtils.isAdmin()){
+            // 如果是 获取所有符合要求的Menu
+            menus = menuMapper.selectAllRouterMenu();
+        }else{
+            // 否则  获取当前用户所具有的Menu
+            menus = menuMapper.selectRouterMenuTreeByUserId(userId);
+        }
+
+        // 构建tree
+        // 先找出第一层的菜单  然后去找他们的子菜单设置到children属性中
+        List<Menu> menuTree = builderMenuTree(menus,0L);
+        return menuTree;
+    }
+
+    private List<Menu> builderMenuTree(List<Menu> menus, Long parentId) {
+        List<Menu> menuTree = menus.stream()
+                .filter(menu -> menu.getParentId().equals(parentId))
+                .map(menu -> menu.setChildren(getChildren(menu, menus)))
+                .collect(Collectors.toList());
+        return menuTree;
+    }
+
+    /**
+     * 获取子Menu集合
+     */
+    private List<Menu> getChildren(Menu menu, List<Menu> menus) {
+        List<Menu> childrenList = menus.stream()
+                .filter(m -> m.getParentId().equals(menu.getId()))
+                .map(m->m.setChildren(getChildren(m,menus)))
+                .collect(Collectors.toList());
+        return childrenList;
+    }
+
 }

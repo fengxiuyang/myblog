@@ -8,7 +8,7 @@ import lombok.experimental.Accessors;
 import java.util.List;
 
 /**
- * 管理用户信息
+ * 管理用户权限信息
  *
  * @author: zhicheng lee
  * @date: 2022/9/29 21:13
