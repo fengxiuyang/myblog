@@ -1,7 +1,10 @@
 package com.lee.blog.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.lee.blog.dto.TagListDto;
 import com.lee.blog.entity.Tag;
+import com.lee.blog.vo.PageVo;
+import com.lee.blog.vo.ResponseResult;
 
 /**
  * 标签
@@ -11,4 +14,5 @@ import com.lee.blog.entity.Tag;
  */
 
 public interface TagService extends IService<Tag> {
+    ResponseResult<PageVo> pageTagList(Integer pageNum, Integer pageSize, TagListDto tagListDto);
 }
