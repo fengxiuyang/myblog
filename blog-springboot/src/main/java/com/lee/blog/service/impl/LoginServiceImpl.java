@@ -3,9 +3,13 @@ package com.lee.blog.service.impl;
 import com.lee.blog.dto.UserDetailsDto;
 import com.lee.blog.entity.User;
 import com.lee.blog.service.LoginService;
+import com.lee.blog.service.MenuService;
+import com.lee.blog.service.RoleService;
 import com.lee.blog.util.BeanCopyUtils;
 import com.lee.blog.util.JwtUtils;
 import com.lee.blog.util.RedisCache;
+import com.lee.blog.util.SecurityUtils;
+import com.lee.blog.vo.AdminUserInfoVo;
 import com.lee.blog.vo.BlogUserLoginVo;
 import com.lee.blog.vo.ResponseResult;
 import com.lee.blog.vo.UserInfoVo;
@@ -15,6 +19,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -32,6 +37,12 @@ public class LoginServiceImpl implements LoginService {
 
     @Autowired
     private RedisCache redisCache;
+
+    @Autowired
+    private MenuService menuService;
+
+    @Autowired
+    private RoleService roleService;
 
     @Override
     public ResponseResult login(User user) {
@@ -53,5 +64,25 @@ public class LoginServiceImpl implements LoginService {
         UserInfoVo userInfoVo = BeanCopyUtils.copyBean(userDetailsDto.getUser(), UserInfoVo.class);
         BlogUserLoginVo vo = new BlogUserLoginVo(jwt, userInfoVo);
         return ResponseResult.okResult(vo);
+    }
+
+    @Override
+    public ResponseResult getInfo() {
+        // 获取当前登陆的用户
+        UserDetailsDto userDetailsDto= SecurityUtils.getLoginUser();
+
+        // 根据用户id查询权限信息
+        List<String> perms = menuService.selectPermsByUserId(userDetailsDto.getUser().getId());
+
+        // 根据用户id查询角色信息
+        List<String> roleKeyList = roleService.selectRoleKeyByUserId(userDetailsDto.getUser().getId());
+
+        // 获取用户信息
+        User user = userDetailsDto.getUser();
+        UserInfoVo userInfoVo = BeanCopyUtils.copyBean(user, UserInfoVo.class);
+
+        // 封装数据返回
+        AdminUserInfoVo adminUserInfoVo = new AdminUserInfoVo(perms,roleKeyList,userInfoVo);
+        return ResponseResult.okResult(adminUserInfoVo);
     }
 }

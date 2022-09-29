@@ -13,4 +13,5 @@ import com.lee.blog.vo.ResponseResult;
 public interface LoginService {
     ResponseResult login(User user);
 
+    ResponseResult getInfo();
 }
