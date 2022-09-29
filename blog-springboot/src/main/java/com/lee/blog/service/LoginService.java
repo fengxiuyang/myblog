@@ -18,4 +18,5 @@ public interface LoginService {
 
     ResponseResult<RoutersVo> getRouters();
 
+    ResponseResult logout();
 }

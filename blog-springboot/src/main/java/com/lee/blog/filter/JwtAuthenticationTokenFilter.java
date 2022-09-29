@@ -58,7 +58,15 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         }
         String userId = claims.getSubject();
         //从redis中获取用户信息
-        UserDetailsDto userDetailsDto = redisCache.getCacheObject("bloglogin:" + userId);
+        UserDetailsDto userDetailsDto = null;
+        String url = request.getRequestURL().toString();
+
+        if (url.endsWith("/user/logout")) {
+            userDetailsDto = redisCache.getCacheObject("login:" + userId);
+        } else {
+            userDetailsDto = redisCache.getCacheObject("bloglogin:" + userId);
+        }
+
         //如果获取不到
         if (Objects.isNull(userDetailsDto)) {
             //说明登录过期  提示重新登录

@@ -53,4 +53,12 @@ public class LoginController {
         return loginService.getRouters();
     }
 
+    /**
+     * 退出
+     */
+    @PostMapping("/user/logout")
+    public ResponseResult logout(){
+        return loginService.logout();
+    }
+
 }

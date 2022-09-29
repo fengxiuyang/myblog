@@ -67,7 +67,7 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public ResponseResult getInfo() {
         // 获取当前登陆的用户
-        UserDetailsDto userDetailsDto= SecurityUtils.getLoginUser();
+        UserDetailsDto userDetailsDto = SecurityUtils.getLoginUser();
 
         // 根据用户id查询权限信息
         List<String> perms = menuService.selectPermsByUserId(userDetailsDto.getUser().getId());
@@ -80,7 +80,7 @@ public class LoginServiceImpl implements LoginService {
         UserInfoVo userInfoVo = BeanCopyUtils.copyBean(user, UserInfoVo.class);
 
         // 封装数据返回
-        AdminUserInfoVo adminUserInfoVo = new AdminUserInfoVo(perms,roleKeyList,userInfoVo);
+        AdminUserInfoVo adminUserInfoVo = new AdminUserInfoVo(perms, roleKeyList, userInfoVo);
         return ResponseResult.okResult(adminUserInfoVo);
     }
 
@@ -91,5 +91,14 @@ public class LoginServiceImpl implements LoginService {
         List<Menu> menus = menuService.selectRouterMenuTreeByUserId(userId);
         //封装数据返回
         return ResponseResult.okResult(new RoutersVo(menus));
+    }
+
+    @Override
+    public ResponseResult logout() {
+        //获取当前登录的用户id
+        Long userId = SecurityUtils.getUserId();
+        //删除redis中对应的值
+        redisCache.deleteObject("login:" + userId);
+        return ResponseResult.okResult();
     }
 }
