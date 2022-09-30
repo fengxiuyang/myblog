@@ -13,8 +13,6 @@ import com.lee.blog.vo.ResponseResult;
 
 public interface CategoryService extends IService<Category> {
 
-
-    ResponseResult getCategoryList();
-
+    ResponseResult listAllCategory();
 }
 
