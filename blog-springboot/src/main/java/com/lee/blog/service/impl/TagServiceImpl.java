@@ -12,8 +12,11 @@ import com.lee.blog.service.TagService;
 import com.lee.blog.util.BeanCopyUtils;
 import com.lee.blog.vo.PageVo;
 import com.lee.blog.vo.ResponseResult;
+import com.lee.blog.vo.TagVo;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+
+import java.util.List;
 
 /**
  * 标签
@@ -66,5 +69,14 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
         Tag tag = BeanCopyUtils.copyBean(tagDto,Tag.class);
         updateById(tag);
         return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult listAllTag() {
+        LambdaQueryWrapper<Tag> wrapper = new LambdaQueryWrapper<>();
+        wrapper.select(Tag::getId,Tag::getName);
+        List<Tag> list = list(wrapper);
+        List<TagVo> tagVos = BeanCopyUtils.copyBeanList(list, TagVo.class);
+        return ResponseResult.okResult(tagVos);
     }
 }

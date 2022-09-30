@@ -63,4 +63,12 @@ public class TagController {
         return tagService.edit(tagDto);
     }
 
+    /**
+     * 获取所有标签
+     */
+    @GetMapping("/listAllTag")
+    public ResponseResult listAllTag(){
+        return tagService.listAllTag();
+    }
+
 }
