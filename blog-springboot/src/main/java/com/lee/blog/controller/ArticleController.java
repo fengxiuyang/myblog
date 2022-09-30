@@ -2,6 +2,7 @@ package com.lee.blog.controller;
 
 
 import com.lee.blog.dto.AddArticleDto;
+import com.lee.blog.entity.Article;
 import com.lee.blog.service.ArticleService;
 import com.lee.blog.vo.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +62,14 @@ public class ArticleController {
     @PostMapping
     public ResponseResult add(@RequestBody AddArticleDto article) {
         return articleService.add(article);
+    }
+
+    /**
+     * 分页查询文章
+     */
+    @GetMapping("/list")
+    public ResponseResult list(Article article, Integer pageNum, Integer pageSize) {
+        return articleService.selectArticlePage(article, pageNum, pageSize);
     }
 
 }
