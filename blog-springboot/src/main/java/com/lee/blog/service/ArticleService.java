@@ -1,6 +1,7 @@
 package com.lee.blog.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.lee.blog.dto.AddArticleDto;
 import com.lee.blog.entity.Article;
 import com.lee.blog.vo.ResponseResult;
 
@@ -20,4 +21,5 @@ public interface ArticleService extends IService<Article> {
 
     ResponseResult updateViewCount(Long id);
 
+    ResponseResult add(AddArticleDto article);
 }

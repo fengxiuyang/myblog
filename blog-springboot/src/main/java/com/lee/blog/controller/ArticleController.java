@@ -1,6 +1,7 @@
 package com.lee.blog.controller;
 
 
+import com.lee.blog.dto.AddArticleDto;
 import com.lee.blog.service.ArticleService;
 import com.lee.blog.vo.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +53,14 @@ public class ArticleController {
     @PutMapping("/updateViewCount/{id}")
     public ResponseResult updateViewCount(@PathVariable("id") Long id){
         return articleService.updateViewCount(id);
+    }
+
+    /**
+     * 新增文章
+     */
+    @PostMapping
+    public ResponseResult add(@RequestBody AddArticleDto article){
+        return articleService.add(article);
     }
 
 }
