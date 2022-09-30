@@ -42,8 +42,16 @@ public class TagController {
      * 删除标签
      */
     @DeleteMapping("/{id}")
-    public ResponseResult delete(@PathVariable Long id){
+    public ResponseResult delete(@PathVariable Long id) {
         return tagService.delete(id);
+    }
+
+    /**
+     * 获取标签信息
+     */
+    @GetMapping(value = "/{id}")
+    public ResponseResult getInfo(@PathVariable(value = "id") Long id) {
+        return tagService.getInfo(id);
     }
 
 }
