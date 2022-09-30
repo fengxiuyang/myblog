@@ -81,4 +81,13 @@ public class ArticleController {
         return articleService.edit(articleDto);
     }
 
+    /**
+     * 删除文章
+     */
+    @DeleteMapping("/{id}")
+    public ResponseResult delete(@PathVariable Long id){
+        articleService.removeById(id);
+        return ResponseResult.okResult();
+    }
+
 }
