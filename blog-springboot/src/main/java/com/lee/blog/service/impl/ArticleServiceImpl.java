@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lee.blog.constants.SystemConstants;
 import com.lee.blog.dto.AddArticleDto;
+import com.lee.blog.dto.ArticleDto;
 import com.lee.blog.entity.Article;
 import com.lee.blog.entity.ArticleTag;
 import com.lee.blog.entity.Category;
@@ -158,5 +159,23 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         pageVo.setTotal(page.getTotal());
         pageVo.setRows(articles);
         return ResponseResult.okResult(pageVo);
+    }
+
+    @Override
+    public ResponseResult edit(ArticleDto articleDto) {
+        Article article = BeanCopyUtils.copyBean(articleDto, Article.class);
+        //更新博客信息
+        updateById(article);
+        //删除原有的 标签和博客的关联
+        LambdaQueryWrapper<ArticleTag> articleTagLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        articleTagLambdaQueryWrapper.eq(ArticleTag::getArticleId,article.getId());
+        articleTagService.remove(articleTagLambdaQueryWrapper);
+        //添加新的博客和标签的关联信息
+        List<ArticleTag> articleTags = articleDto.getTags().stream()
+                .map(tagId -> new ArticleTag(articleDto.getId(), tagId))
+                .collect(Collectors.toList());
+        articleTagService.saveBatch(articleTags);
+
+        return ResponseResult.okResult();
     }
 }

@@ -2,6 +2,7 @@ package com.lee.blog.controller;
 
 
 import com.lee.blog.dto.AddArticleDto;
+import com.lee.blog.dto.ArticleDto;
 import com.lee.blog.entity.Article;
 import com.lee.blog.service.ArticleService;
 import com.lee.blog.vo.ResponseResult;
@@ -70,6 +71,14 @@ public class ArticleController {
     @GetMapping("/list")
     public ResponseResult list(Article article, Integer pageNum, Integer pageSize) {
         return articleService.selectArticlePage(article, pageNum, pageSize);
+    }
+
+    /**
+     * 修改文章
+     */
+    @PutMapping
+    public ResponseResult edit(@RequestBody ArticleDto articleDto){
+        return articleService.edit(articleDto);
     }
 
 }
