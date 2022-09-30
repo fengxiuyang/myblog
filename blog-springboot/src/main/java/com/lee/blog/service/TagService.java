@@ -2,6 +2,7 @@ package com.lee.blog.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lee.blog.dto.AddTagDto;
+import com.lee.blog.dto.EditTagDto;
 import com.lee.blog.dto.TagListDto;
 import com.lee.blog.entity.Tag;
 import com.lee.blog.vo.PageVo;
@@ -22,4 +23,6 @@ public interface TagService extends IService<Tag> {
     ResponseResult delete(Long id);
 
     ResponseResult getInfo(Long id);
+
+    ResponseResult edit(EditTagDto tagDto);
 }

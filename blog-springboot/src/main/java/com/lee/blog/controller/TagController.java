@@ -1,6 +1,7 @@
 package com.lee.blog.controller;
 
 import com.lee.blog.dto.AddTagDto;
+import com.lee.blog.dto.EditTagDto;
 import com.lee.blog.dto.TagListDto;
 import com.lee.blog.service.TagService;
 import com.lee.blog.vo.PageVo;
@@ -52,6 +53,14 @@ public class TagController {
     @GetMapping(value = "/{id}")
     public ResponseResult getInfo(@PathVariable(value = "id") Long id) {
         return tagService.getInfo(id);
+    }
+
+    /**
+     * 修改标签
+     */
+    @PutMapping
+    public ResponseResult edit(@RequestBody EditTagDto tagDto){
+        return tagService.edit(tagDto);
     }
 
 }

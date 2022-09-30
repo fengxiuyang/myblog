@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lee.blog.dto.AddTagDto;
+import com.lee.blog.dto.EditTagDto;
 import com.lee.blog.dto.TagListDto;
 import com.lee.blog.entity.Tag;
 import com.lee.blog.mapper.TagMapper;
@@ -58,5 +59,12 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
     public ResponseResult getInfo(Long id) {
         Tag tag = getById(id);
         return ResponseResult.okResult(tag);
+    }
+
+    @Override
+    public ResponseResult edit(EditTagDto tagDto) {
+        Tag tag = BeanCopyUtils.copyBean(tagDto,Tag.class);
+        updateById(tag);
+        return ResponseResult.okResult();
     }
 }
