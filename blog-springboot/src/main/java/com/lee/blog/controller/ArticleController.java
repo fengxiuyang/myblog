@@ -32,7 +32,7 @@ public class ArticleController {
     }
 
     /**
-     * 文章列表
+     * 分类文章列表
      */
     @GetMapping("/articleList")
     public ResponseResult articleList(Integer pageNum, Integer pageSize, Long categoryId) {
@@ -51,7 +51,7 @@ public class ArticleController {
      * 更新文章浏览量
      */
     @PutMapping("/updateViewCount/{id}")
-    public ResponseResult updateViewCount(@PathVariable("id") Long id){
+    public ResponseResult updateViewCount(@PathVariable("id") Long id) {
         return articleService.updateViewCount(id);
     }
 
@@ -59,7 +59,7 @@ public class ArticleController {
      * 新增文章
      */
     @PostMapping
-    public ResponseResult add(@RequestBody AddArticleDto article){
+    public ResponseResult add(@RequestBody AddArticleDto article) {
         return articleService.add(article);
     }
 
