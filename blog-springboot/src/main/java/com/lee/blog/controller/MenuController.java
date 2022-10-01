@@ -8,9 +8,7 @@ import com.lee.blog.vo.MenuTreeVo;
 import com.lee.blog.vo.MenuVo;
 import com.lee.blog.vo.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -36,6 +34,15 @@ public class MenuController {
         List<Menu> menus = menuService.selectMenuList(menu);
         List<MenuVo> menuVos = BeanCopyUtils.copyBeanList(menus, MenuVo.class);
         return ResponseResult.okResult(menuVos);
+    }
+
+    /**
+     * 新增菜单
+     */
+    @PostMapping
+    public ResponseResult add(@RequestBody Menu menu) {
+        menuService.save(menu);
+        return ResponseResult.okResult();
     }
 
     /**
