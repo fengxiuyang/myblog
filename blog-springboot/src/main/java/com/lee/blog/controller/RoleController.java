@@ -49,4 +49,13 @@ public class RoleController {
         return ResponseResult.okResult();
     }
 
+    /**
+     * 删除角色
+     */
+    @DeleteMapping("/{id}")
+    public ResponseResult remove(@PathVariable Long id) {
+        roleService.removeById(id);
+        return ResponseResult.okResult();
+    }
+
 }
