@@ -7,6 +7,7 @@ import com.lee.blog.util.SystemConverter;
 import com.lee.blog.vo.MenuTreeVo;
 import com.lee.blog.vo.MenuVo;
 import com.lee.blog.vo.ResponseResult;
+import com.lee.blog.vo.RoleMenuTreeSelectVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,6 +59,18 @@ public class MenuController {
     }
 
     /**
+     * 删除菜单
+     */
+    @DeleteMapping("/{menuId}")
+    public ResponseResult remove(@PathVariable("menuId") Long menuId) {
+        if (menuService.hasChild(menuId)) {
+            return ResponseResult.errorResult(500,"存在子菜单不允许删除");
+        }
+        menuService.removeById(menuId);
+        return ResponseResult.okResult();
+    }
+
+    /**
      * 获取菜单下拉树列表
      */
     @GetMapping("/treeselect")
@@ -65,5 +78,17 @@ public class MenuController {
         List<Menu> menus = menuService.selectMenuList(new Menu());
         List<MenuTreeVo> options = SystemConverter.buildMenuSelectTree(menus);
         return ResponseResult.okResult(options);
+    }
+
+    /**
+     * 加载对应角色菜单列表树
+     */
+    @GetMapping(value = "/roleMenuTreeselect/{roleId}")
+    public ResponseResult roleMenuTreeSelect(@PathVariable("roleId") Long roleId) {
+        List<Menu> menus = menuService.selectMenuList(new Menu());
+        List<Long> checkedKeys = menuService.selectMenuListByRoleId(roleId);
+        List<MenuTreeVo> menuTreeVos = SystemConverter.buildMenuSelectTree(menus);
+        RoleMenuTreeSelectVo vo = new RoleMenuTreeSelectVo(checkedKeys,menuTreeVos);
+        return ResponseResult.okResult(vo);
     }
 }
