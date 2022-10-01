@@ -4,10 +4,7 @@ import com.lee.blog.entity.Role;
 import com.lee.blog.service.RoleService;
 import com.lee.blog.vo.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -41,6 +38,15 @@ public class RoleController {
     public ResponseResult getInfo(@PathVariable Long roleId) {
         Role role = roleService.getById(roleId);
         return ResponseResult.okResult(role);
+    }
+
+    /**
+     * 修改角色
+     */
+    @PutMapping
+    public ResponseResult edit(@RequestBody Role role) {
+        roleService.updateRole(role);
+        return ResponseResult.okResult();
     }
 
 }
