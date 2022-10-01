@@ -18,4 +18,6 @@ public interface RoleService extends IService<Role> {
     List<Role> selectRoleAll();
 
     void updateRole(Role role);
+
+    void insertRole(Role role);
 }

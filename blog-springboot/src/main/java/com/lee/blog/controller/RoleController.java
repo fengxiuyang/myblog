@@ -58,4 +58,14 @@ public class RoleController {
         return ResponseResult.okResult();
     }
 
+    /**
+     * 新增角色
+     */
+    @PostMapping
+    public ResponseResult add(@RequestBody Role role) {
+        roleService.insertRole(role);
+        return ResponseResult.okResult();
+
+    }
+
 }

@@ -56,6 +56,15 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         insertRoleMenu(role);
     }
 
+    @Override
+    public void insertRole(Role role) {
+        save(role);
+
+        if (role.getMenuIds() != null && role.getMenuIds().length > 0) {
+            insertRoleMenu(role);
+        }
+    }
+
     private void insertRoleMenu(Role role) {
         List<RoleMenu> roleMenuList = Arrays.stream(role.getMenuIds())
                 .map(memuId -> new RoleMenu(role.getId(), memuId))
