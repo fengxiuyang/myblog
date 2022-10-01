@@ -1,6 +1,8 @@
 package com.lee.blog.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.lee.blog.constants.SystemConstants;
 import com.lee.blog.entity.Role;
 import com.lee.blog.mapper.RoleMapper;
 import com.lee.blog.service.RoleService;
@@ -21,12 +23,20 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     @Override
     public List<String> selectRoleKeyByUserId(Long id) {
         //判断是否是管理员 如果是返回集合中只需要有admin
-        if(id == 1L){
+        if (id == 1L) {
             List<String> roleKeys = new ArrayList<>();
             roleKeys.add("admin");
             return roleKeys;
         }
         //否则查询用户所具有的角色信息
         return getBaseMapper().selectRoleKeyByUserId(id);
+    }
+
+    @Override
+    public List<Role> selectRoleAll() {
+        // 查询条件
+        LambdaQueryWrapper<Role> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Role::getStatus, SystemConstants.NORMAL);
+        return list(queryWrapper);
     }
 }
