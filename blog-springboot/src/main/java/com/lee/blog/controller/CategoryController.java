@@ -11,9 +11,7 @@ import com.lee.blog.vo.ExcelCategoryVo;
 import com.lee.blog.vo.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -35,7 +33,7 @@ public class CategoryController {
      * 查询所有分类
      */
     @GetMapping("/listAllCategory")
-    public ResponseResult listAllCategory(){
+    public ResponseResult listAllCategory() {
         return categoryService.listAllCategory();
     }
 
@@ -61,6 +59,33 @@ public class CategoryController {
             ResponseResult result = ResponseResult.errorResult(AppHttpCodeEnum.SYSTEM_ERROR);
             WebUtils.renderString(response, JSON.toJSONString(result));
         }
+    }
+
+    /**
+     * 新增分类
+     */
+    @PostMapping
+    public ResponseResult add(@RequestBody Category category) {
+        categoryService.save(category);
+        return ResponseResult.okResult();
+    }
+
+    /**
+     * 删除分类
+     */
+    @DeleteMapping(value = "/{id}")
+    public ResponseResult remove(@PathVariable(value = "id") Long id) {
+        categoryService.removeById(id);
+        return ResponseResult.okResult();
+    }
+
+    /**
+     * 修改分类
+     */
+    @PutMapping
+    public ResponseResult edit(@RequestBody Category category) {
+        categoryService.updateById(category);
+        return ResponseResult.okResult();
     }
 
 }
