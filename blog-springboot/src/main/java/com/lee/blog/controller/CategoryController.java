@@ -88,4 +88,13 @@ public class CategoryController {
         return ResponseResult.okResult();
     }
 
+    /**
+     * 查询分类
+     */
+    @GetMapping(value = "/{id}")
+    public ResponseResult getInfo(@PathVariable(value = "id") Long id) {
+        Category category = categoryService.getById(id);
+        return ResponseResult.okResult(category);
+    }
+
 }
