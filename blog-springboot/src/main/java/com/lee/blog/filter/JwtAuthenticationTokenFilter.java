@@ -61,9 +61,9 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         UserDetailsDto userDetailsDto = null;
         String url = request.getRequestURL().toString();
 
-        if (url.endsWith("/user/logout") || url.contains("/content/article")) {
+        if (url.endsWith("/user/logout") || url.contains("/content/article") || url.contains("/system/menu")) {
             userDetailsDto = redisCache.getCacheObject("login:" + userId);
-        } else {
+        } else{
             userDetailsDto = redisCache.getCacheObject("bloglogin:" + userId);
         }
 

@@ -29,6 +29,7 @@ mybatis-plus:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     map-underscore-to-camel-case: true
   global-config:
+    field-strategy: 1
     db-config:
       id-type: auto
       # table-prefix: sg_

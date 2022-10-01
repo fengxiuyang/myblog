@@ -28,7 +28,7 @@ public class updateViewCount {
     private ArticleService articleService;
 
     @Scheduled(cron = "0 0/5 * * * ?")
-    public void updateViewCount(){
+    public void updateViewCount() {
         // 获取redis中的浏览量
         Map<String, Integer> viewCountMap = redisCache.getCacheMap("article:viewCount");
 

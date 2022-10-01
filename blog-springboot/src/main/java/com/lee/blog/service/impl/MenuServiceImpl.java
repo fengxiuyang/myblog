@@ -8,6 +8,7 @@ import com.lee.blog.mapper.MenuMapper;
 import com.lee.blog.service.MenuService;
 import com.lee.blog.util.SecurityUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,18 +46,30 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         List<Menu> menus = null;
 
         // 判断是否是管理员
-        if(SecurityUtils.isAdmin()){
+        if (SecurityUtils.isAdmin()) {
             // 如果是 获取所有符合要求的Menu
             menus = menuMapper.selectAllRouterMenu();
-        }else{
+        } else {
             // 否则  获取当前用户所具有的Menu
             menus = menuMapper.selectRouterMenuTreeByUserId(userId);
         }
 
         // 构建tree
         // 先找出第一层的菜单  然后去找他们的子菜单设置到children属性中
-        List<Menu> menuTree = builderMenuTree(menus,0L);
+        List<Menu> menuTree = builderMenuTree(menus, 0L);
         return menuTree;
+    }
+
+    @Override
+    public List<Menu> selectMenuList(Menu menu) {
+        // 查询条件
+        LambdaQueryWrapper<Menu> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.like(StringUtils.hasText(menu.getMenuName()), Menu::getMenuName, menu.getMenuName());
+        queryWrapper.eq(StringUtils.hasText(menu.getStatus()), Menu::getStatus, menu.getStatus());
+        queryWrapper.orderByAsc(Menu::getParentId, Menu::getOrderNum);
+        List<Menu> menus = list(queryWrapper);
+
+        return menus;
     }
 
     private List<Menu> builderMenuTree(List<Menu> menus, Long parentId) {
@@ -73,7 +86,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     private List<Menu> getChildren(Menu menu, List<Menu> menus) {
         List<Menu> childrenList = menus.stream()
                 .filter(m -> m.getParentId().equals(menu.getId()))
-                .map(m->m.setChildren(getChildren(m,menus)))
+                .map(m -> m.setChildren(getChildren(m, menus)))
                 .collect(Collectors.toList());
         return childrenList;
     }
