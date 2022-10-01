@@ -46,6 +46,18 @@ public class MenuController {
     }
 
     /**
+     * 修改菜单
+     */
+    @PutMapping
+    public ResponseResult edit(@RequestBody Menu menu) {
+        if (menu.getId().equals(menu.getParentId())) {
+            return ResponseResult.errorResult(500,"修改菜单'" + menu.getMenuName() + "'失败，上级菜单不能选择自己");
+        }
+        menuService.updateById(menu);
+        return ResponseResult.okResult();
+    }
+
+    /**
      * 获取菜单下拉树列表
      */
     @GetMapping("/treeselect")
