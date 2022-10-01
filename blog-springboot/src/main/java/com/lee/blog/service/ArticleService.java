@@ -27,4 +27,6 @@ public interface ArticleService extends IService<Article> {
     ResponseResult selectArticlePage(Article article, Integer pageNum, Integer pageSize);
 
     ResponseResult edit(ArticleDto articleDto);
+
+    ResponseResult getInfo(Long id);
 }

@@ -168,7 +168,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         updateById(article);
         //删除原有的 标签和博客的关联
         LambdaQueryWrapper<ArticleTag> articleTagLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        articleTagLambdaQueryWrapper.eq(ArticleTag::getArticleId,article.getId());
+        articleTagLambdaQueryWrapper.eq(ArticleTag::getArticleId, article.getId());
         articleTagService.remove(articleTagLambdaQueryWrapper);
         //添加新的博客和标签的关联信息
         List<ArticleTag> articleTags = articleDto.getTags().stream()
@@ -177,5 +177,24 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         articleTagService.saveBatch(articleTags);
 
         return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult getInfo(Long id) {
+        // 获取文章
+        Article article = getById(id);
+
+        // 获取标签
+        LambdaQueryWrapper<ArticleTag> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(ArticleTag::getArticleId, article.getId());
+        List<ArticleTag> articleTags = articleTagService.list(queryWrapper);
+        List<Long> tags = articleTags.stream().map(articleTag -> articleTag.getTagId()).collect(Collectors.toList());
+
+        // 组装VO
+        ArticleVo articleVo = BeanCopyUtils.copyBean(article, ArticleVo.class);
+        articleVo.setTags(tags);
+
+        // 返回数据
+        return ResponseResult.okResult(articleVo);
     }
 }
